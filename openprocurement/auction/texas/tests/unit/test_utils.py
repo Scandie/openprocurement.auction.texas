@@ -88,6 +88,7 @@ class TestPrepareAuctionStages(unittest.TestCase):
             {
                 'start': stage_start.isoformat(),
                 'type': PAUSE,
+                'planned_end': (stage_start + timedelta(seconds=PAUSE_DURATION)).isoformat(),
             },
             {
                 'start': (stage_start + timedelta(seconds=PAUSE_DURATION)).isoformat(),
@@ -106,6 +107,7 @@ class TestPrepareAuctionStages(unittest.TestCase):
             {
                 'start': stage_start.isoformat(),
                 'type': PAUSE,
+                'planned_end': (stage_start + timedelta(seconds=PAUSE_DURATION)).isoformat()
             },
             {
                 'start': (stage_start + timedelta(seconds=PAUSE_DURATION)).isoformat(),
@@ -126,6 +128,7 @@ class TestPrepareAuctionStages(unittest.TestCase):
             {
                 'start': stage_start.isoformat(),
                 'type': PAUSE,
+                'planned_end': (stage_start + timedelta(seconds=PAUSE_DURATION)).isoformat()
             },
             {
                 'start': (stage_start + timedelta(seconds=PAUSE_DURATION)).isoformat(),
@@ -145,6 +148,7 @@ class TestPrepareAuctionStages(unittest.TestCase):
             {
                 'start': stage_start.isoformat(),
                 'type': PAUSE,
+                'planned_end': set_specific_hour(stage_start, DEADLINE_HOUR).isoformat()
             },
             {}
         ]
@@ -156,9 +160,9 @@ class TestPrepareAuctionStages(unittest.TestCase):
 class TestPrepareEndStage(unittest.TestCase):
 
     def test_prepare_end_stage(self):
-        start = datetime.now().replace(hour=DEADLINE_HOUR - 2)
+        start = datetime.now().replace(hour=DEADLINE_HOUR - 2).isoformat()
         expected = {
-            'start': start.isoformat(),
+            'start': start,
             'type': END
         }
 

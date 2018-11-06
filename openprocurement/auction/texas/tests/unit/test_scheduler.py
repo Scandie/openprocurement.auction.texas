@@ -153,8 +153,9 @@ class TestEndAuction(TestScheduler):
         self.mocked_yaml_dump = self.patch_yaml_dump.start()
         self.mocked_yaml_dump.return_value = 'yaml dump'
 
+        self.isoformat = 'isoformat_now'
         self.auction_document = {
-            'stages': [],
+            'stages': [{'planned_end': self.isoformat}],
             'current_stage': 0
         }
         self.job_service.context['auction_document'] = self.auction_document
@@ -169,7 +170,6 @@ class TestEndAuction(TestScheduler):
         )
         self.mocked_datetime = self.patch_datetime.start()
         now = mock.MagicMock()
-        self.isoformat = 'isoformat_now'
         now.isoformat.return_value = self.isoformat
         self.mocked_datetime.now.return_value = now
 
@@ -181,7 +181,7 @@ class TestEndAuction(TestScheduler):
                 'type': PREANNOUNCEMENT,
             }
         )
-        auction_document_before_approval['current_stage'] = 0
+        auction_document_before_approval['current_stage'] = 1
 
         self.job_service.context['server'] = None
 
@@ -211,7 +211,7 @@ class TestEndAuction(TestScheduler):
         self.assertEqual(self.end_auction_event.set.call_count, 1)
 
         final_document = deepcopy(auction_document_before_approval)
-        final_document['current_stage'] = 1
+        final_document['current_stage'] = 2
         final_document['stages'].append(self.end_stage)
         final_document['endDate'] = self.isoformat
         self.assertEqual(self.job_service.context['auction_document'], final_document)
@@ -225,10 +225,10 @@ class TestEndAuction(TestScheduler):
                 'type': PREANNOUNCEMENT,
             }
         )
-        auction_document_before_approval['current_stage'] = 0
+        auction_document_before_approval['current_stage'] = 1
 
         final_document = deepcopy(auction_document_before_approval)
-        final_document['current_stage'] = 1
+        final_document['current_stage'] = 2
         final_document['stages'].append(self.end_stage)
         final_document['endDate'] = self.isoformat
 
@@ -274,11 +274,11 @@ class TestEndAuction(TestScheduler):
         )
 
         final_document = deepcopy(auction_document_before_approval)
-        final_document['current_stage'] = 1
+        final_document['current_stage'] = 2
         final_document['stages'].append(self.end_stage)
         final_document['endDate'] = self.isoformat
 
-        auction_document_before_approval['current_stage'] = 0
+        auction_document_before_approval['current_stage'] = 1
         self.job_service.end_auction()
 
         self.assertEqual(self.server.stop.call_count, 0)
@@ -328,7 +328,7 @@ class TestEndAuction(TestScheduler):
         final_document['stages'].append(self.end_stage)
         final_document['endDate'] = self.isoformat
 
-        auction_document_before_approval['current_stage'] = 0
+        auction_document_before_approval['current_stage'] = 1
         self.job_service.end_auction()
 
         self.assertEqual(self.server.stop.call_count, 0)
