@@ -105,6 +105,9 @@ class JobService(object):
             "Clear mapping", extra={"JOURNAL_REQUEST_ID": request_id}
         )
 
+        last_stage = self.context['auction_document']['stages'][-1]
+        auction_end = last_stage.get('time') if last_stage.get('time') else last_stage['planned_end']
+
         stage = {
             'start': datetime.now(TIMEZONE).isoformat(),
             'type': PREANNOUNCEMENT,
@@ -129,12 +132,11 @@ class JobService(object):
         if result and isinstance(result, dict):
             self.context['auction_document'] = result
 
-        auction_end = datetime.now(TIMEZONE)
         stage = prepare_end_stage(auction_end)
         with update_auction_document(self.context, self.database) as auction_document:
             auction_document["stages"].append(stage)
             auction_document["current_stage"] = len(auction_document["stages"]) - 1
-            auction_document['endDate'] = auction_end.isoformat()
+            auction_document['endDate'] = auction_end
 
         self.context['end_auction_event'].set()
 

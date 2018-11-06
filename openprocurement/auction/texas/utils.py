@@ -52,12 +52,16 @@ def prepare_auction_stages(stage_start, auction_data, deadline_hour, fast_forwar
             'planned_end': planned_end.isoformat()
         })
 
+    pause_stage.update({
+        'planned_end': stage_start.isoformat() if main_round_stage else deadline.isoformat()
+    })
+
     return stages
 
 
 def prepare_end_stage(start):
     stage = {
-        'start': start.isoformat(),
+        'start': start,
         'type': END,
     }
     return stage
