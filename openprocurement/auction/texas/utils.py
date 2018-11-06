@@ -61,7 +61,7 @@ def prepare_auction_stages(stage_start, auction_data, deadline_hour, fast_forwar
 
 def prepare_end_stage(start):
     stage = {
-        'start': start,
+        'start': start.isoformat(),
         'type': END,
     }
     return stage

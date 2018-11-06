@@ -132,7 +132,7 @@ class JobService(object):
         if result and isinstance(result, dict):
             self.context['auction_document'] = result
 
-        stage = prepare_end_stage(auction_end)
+        stage = prepare_end_stage(datetime.now(TIMEZONE))
         with update_auction_document(self.context, self.database) as auction_document:
             auction_document["stages"].append(stage)
             auction_document["current_stage"] = len(auction_document["stages"]) - 1

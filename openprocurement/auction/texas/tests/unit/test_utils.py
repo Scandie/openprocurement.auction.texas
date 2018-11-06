@@ -160,9 +160,9 @@ class TestPrepareAuctionStages(unittest.TestCase):
 class TestPrepareEndStage(unittest.TestCase):
 
     def test_prepare_end_stage(self):
-        start = datetime.now().replace(hour=DEADLINE_HOUR - 2).isoformat()
+        start = datetime.now().replace(hour=DEADLINE_HOUR - 2)
         expected = {
-            'start': start,
+            'start': start.isoformat(),
             'type': END
         }
 
